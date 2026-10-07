@@ -1,7 +1,6 @@
 import { association } from '../../data/association';
 import type { DrivePage } from '../../lib/drive-index';
 import type { ResponsiveImage } from '../../lib/images';
-import { Card } from '../ui/Card';
 import { ResponsiveImg } from '../ui/ResponsiveImg';
 import { RichText } from '../ui/RichText';
 import styles from './HomePage.module.css';
@@ -29,11 +28,6 @@ export function HomePage({
         </div>
         {startImage ? <ResponsiveImg image={startImage} className={styles.image} eager /> : null}
       </section>
-
-      <div className={styles.cards}>
-        <Card card={association.cards.contact} />
-        <Card card={association.cards.broker} />
-      </div>
 
       <section aria-labelledby="mer" className={styles.more}>
         <h2 id="mer">Hitta mer</h2>

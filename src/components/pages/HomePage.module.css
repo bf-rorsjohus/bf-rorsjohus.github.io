@@ -24,16 +24,8 @@
   object-fit: cover;
 }
 
-.cards {
-  display: grid;
-  gap: var(--space-3);
+.more {
   margin-top: var(--space-6);
-}
-
-@media (min-width: 44rem) {
-  .cards {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 .links {

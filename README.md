@@ -76,7 +76,7 @@ SBC site) plus placeholder files and images.
   directives and no `useState`/`useEffect`** (enforced by ESLint). Styles are CSS Modules next
   to each component; tokens live in `src/styles/global.css`.
 - `src/lib/*.ts` – data loading (`content.ts`, `images.ts`), SEO (`seo.ts`), helpers.
-- `src/data/association.ts` – fixed facts and the start page's two SBC link cards.
+- `src/data/association.ts` – fixed facts (name, address, org nr, e-mail, member portal link).
 - `scripts/` – `sync-drive.ts`, `check-changed.ts`, `check-dist.ts`.
 
 `check-dist.ts` fails the build if a page references JavaScript, lacks a title, description,
