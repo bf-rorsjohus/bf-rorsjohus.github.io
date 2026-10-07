@@ -59,7 +59,7 @@ export async function getGalleryImages(): Promise<ResponsiveImage[]> {
         'bilder',
         i.fileName,
         i.title,
-        '(min-width: 1100px) 340px, (min-width: 700px) 45vw, 100vw',
+        '(min-width: 1344px) 588px, (min-width: 704px) 44vw, 90vw',
       ),
     ),
   );
@@ -72,6 +72,6 @@ export async function getStartImage(): Promise<ResponsiveImage | null> {
     'startsida',
     fileName,
     'BF Rörsjöhus, fastigheten i Rörsjöstaden',
-    '(min-width: 1100px) 1040px, 100vw',
+    '(min-width: 1344px) 580px, (min-width: 704px) 44vw, 90vw',
   );
 }

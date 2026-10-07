@@ -1,52 +1,45 @@
-/* Design tokens, reset and base typography. Component styles live in *.module.css. */
-
+/* Shared palette and typography: warm paper, aged brass and muted green. */
 :root {
-  /* Colour: warm off-white, near-black text, brick accent from the facade.
-     Contrast against --color-bg: text 15.6:1, muted 7.0:1, accent 7.4:1 (WCAG AA needs 4.5:1). */
-  --color-bg: #faf7f2;
-  --color-surface: #ffffff;
-  --color-text: #1f1b18;
-  --color-muted: #5b524b;
-  --color-accent: #8a3b2b;
-  --color-accent-strong: #6f2d20;
-  --color-border: #e2d9ce;
-  --color-focus: #1f5fbf;
-
-  /* Typography */
-  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --text-sm: 0.9375rem;
-  --text-base: 1.125rem; /* 18px */
-  --text-lg: 1.375rem;
-  --text-xl: 1.75rem;
-  --text-2xl: clamp(1.875rem, 1.4rem + 1.8vw, 2.5rem);
-  --leading: 1.6;
-
-  /* Spacing (8px scale) */
+  --color-bg: #f8f6f0;
+  --color-surface: #fffdf8;
+  --color-panel: #eeefe6;
+  --color-text: #303d36;
+  --color-muted: #657067;
+  --color-accent: #52654f;
+  --color-accent-strong: #344630;
+  --color-on-accent: var(--color-surface);
+  --color-border: #d9d9cb;
+  --color-focus: #846531;
+  --color-brass: #7d6740;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif:
+    'Baskerville', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-lg: 1.5rem;
+  --text-xl: 2.25rem;
+  --text-2xl: clamp(2.75rem, 2rem + 3vw, 5rem);
+  --leading: 1.8;
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
   --space-4: 2rem;
   --space-6: 3rem;
   --space-8: 4rem;
-
-  /* Layout */
-  --width-text: 45rem; /* ~720px reading column */
-  --width-wide: 70rem; /* ~1120px */
-  --gutter: clamp(1rem, 0.5rem + 2vw, 1.5rem);
-  --radius: 0.5rem;
+  --width-text: 45rem;
+  --width-wide: 76rem;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --radius: 2px;
 }
-
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
-
 body {
   margin: 0;
   min-height: 100vh;
@@ -57,76 +50,75 @@ body {
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--leading);
-  font-feature-settings: 'tnum' 0;
+  -webkit-font-smoothing: antialiased;
 }
-
+::selection {
+  background: #e0e5d5;
+  color: #303d36;
+}
 h1,
 h2,
 h3 {
-  line-height: 1.25;
-  font-weight: 650;
+  font-family: var(--font-serif);
+  line-height: 1.1;
+  font-weight: 400;
   margin: 0 0 var(--space-2);
 }
-
 h1 {
   font-size: var(--text-2xl);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.045em;
 }
-
 h2 {
   font-size: var(--text-xl);
   margin-top: var(--space-6);
+  letter-spacing: -0.025em;
 }
-
 h3 {
   font-size: var(--text-lg);
   margin-top: var(--space-4);
 }
-
 p,
 ul,
 ol {
   margin: 0 0 var(--space-2);
 }
-
 a {
   color: var(--color-accent);
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.15em;
+  text-underline-offset: 0.25em;
 }
-
 a:hover {
   color: var(--color-accent-strong);
-  text-decoration-thickness: 2px;
 }
-
 :focus-visible {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 5px;
 }
-
 main {
   flex: 1;
 }
-
 img {
   max-width: 100%;
   height: auto;
   display: block;
 }
-
 .container {
   width: 100%;
   max-width: calc(var(--width-wide) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
-
 .reading {
   max-width: var(--width-text);
 }
-
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-brass);
+}
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -138,9 +130,14 @@ img {
   white-space: nowrap;
   border: 0;
 }
-
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+  a {
+    transition:
+      color 180ms,
+      background-color 180ms,
+      border-color 180ms;
   }
 }

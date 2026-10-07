@@ -7,7 +7,7 @@
 .table th,
 .table td {
   text-align: left;
-  padding: var(--space-2) var(--space-1);
+  padding: 1.4rem 1rem;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -23,7 +23,8 @@
 
 .name a {
   display: inline-block;
-  min-height: 24px;
+  min-height: 44px;
+  align-content: center;
 }
 
 /* Phones: each row becomes a small block: title, then "2025 · PDF · 2,1 MB". */
@@ -57,4 +58,15 @@
   .table td + td::before {
     content: ' · ';
   }
+}
+
+.table thead {
+  background: var(--color-panel);
+}
+.table tbody tr:hover {
+  background: var(--color-surface);
+}
+.name {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
 }

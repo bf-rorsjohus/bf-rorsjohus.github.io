@@ -7,13 +7,13 @@
 }
 
 .prose h2 {
-  font-size: var(--text-lg);
+  font-size: 2rem;
   margin-top: var(--space-4);
   margin-bottom: var(--space-1);
 }
 
 .prose h3 {
-  font-size: var(--text-base);
+  font-size: 1.5rem;
   margin-top: var(--space-3);
   margin-bottom: var(--space-1);
 }

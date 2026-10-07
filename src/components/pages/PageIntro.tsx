@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
+import styles from './PageIntro.module.css';
 
-/** Heading block shared by the inner pages. */
 export function PageIntro({
   title,
   children,
@@ -11,17 +11,13 @@ export function PageIntro({
   back?: { href: string; label: string };
 }) {
   return (
-    <div
-      className="reading"
-      style={{ paddingTop: 'var(--space-6)', marginBottom: 'var(--space-4)' }}
-    >
-      {back ? (
-        <p style={{ marginBottom: 'var(--space-1)' }}>
-          <a href={back.href}>← {back.label}</a>
-        </p>
-      ) : null}
+    <div className={styles.intro}>
+      <a className={styles.back} href={back?.href ?? '/'}>
+        ← {back?.label ?? 'Startsida'}
+      </a>
+      <p className="eyebrow">BF Rörsjöhus · Rörsjöstaden</p>
       <h1>{title}</h1>
-      {children}
+      {children ? <div className={styles.description}>{children}</div> : null}
     </div>
   );
 }
