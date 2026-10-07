@@ -17,6 +17,7 @@ const indexingEnabled = () => process.env.INDEXING === 'true';
 
 export function buildSeo(opts: {
   path: string;
+  canonicalPath?: string; // when this page is a variant of another (e.g. a sort order)
   title: string; // page-specific part; the site name is appended unless isHome
   description: string;
   isHome?: boolean;
@@ -30,7 +31,7 @@ export function buildSeo(opts: {
   return {
     title,
     description,
-    canonical: opts.noindex ? null : new URL(opts.path, SITE_URL).toString(),
+    canonical: opts.noindex ? null : new URL(opts.canonicalPath ?? opts.path, SITE_URL).toString(),
     noindex: Boolean(opts.noindex) || !indexingEnabled(),
     jsonLd: opts.isHome ? [organizationJsonLd(), websiteJsonLd()] : [organizationJsonLd()],
   };

@@ -96,6 +96,9 @@ not exist. (`@astrojs/react` always emits an unused client runtime file; the che
 ## Key decisions
 
 - Astro + TSX without hydration: familiar components, zero client JS.
+- Sorting on `/dokument/` without JavaScript: each sort order is its own pre-rendered page
+  (`/dokument/`, `/dokument/namn-o-a/`, `/dokument/nyast/`, `/dokument/aldst/`), canonical to
+  `/dokument/` and left out of the sitemap. Default: name A–Ö.
 - Build-time Drive sync instead of browser fetching or embeds: no API key in the page, no
   cookies, documents served from our own address, site works even if Drive is down.
 - Private folder + service account via federation: nothing public in Drive, no secrets in GitHub.

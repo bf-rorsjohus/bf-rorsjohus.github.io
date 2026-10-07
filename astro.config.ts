@@ -8,5 +8,11 @@ export default defineConfig({
   site: 'https://bf-rorsjohus.github.io',
   trailingSlash: 'always',
   build: { format: 'directory' },
-  integrations: [react(), sitemap({ filter: (page) => !page.includes('/404') })],
+  integrations: [
+    react(),
+    // Only canonical pages: no 404, and not the sorted variants of /dokument/.
+    sitemap({
+      filter: (page) => !page.includes('/404') && !/\/dokument\/[^/]+\/$/.test(page),
+    }),
+  ],
 });
