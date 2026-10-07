@@ -11,7 +11,7 @@ export type Association = {
   district: string;
   property: string;
   yearBuilt: number;
-  apartments: number;
+  apartments: number; // residential units only, from the latest annual report
   email: string;
   memberPortal: { label: string; href: string };
 };
@@ -25,7 +25,7 @@ export const association = {
   district: 'Rörsjöstaden',
   property: 'Malmö Judith 7',
   yearBuilt: 1898,
-  apartments: 33,
+  apartments: 28, // plus 3 commercial units; source: Årsredovisning 2025
   email: 'bfrorsjohus@gmail.com',
   memberPortal: { label: 'Logga in', href: 'https://hemma.sbc.se/' },
 } as const satisfies Association;
