@@ -1,7 +1,9 @@
 // Reads the private Google Drive folder "Hemsida" and turns it into site content.
 //
 //   Hemsida/
-//     startsida        (Google Doc)  -> src/content/startsida/startsida.md
+//     startsida/       (one Google Doc, one image)
+//                      Doc   -> src/content/startsida/startsida.md
+//                      image -> src/assets/drive/startsida/<file>
 //     filer/                         -> public/dokument/<slug>.<ext>
 //     bilder/                        -> src/assets/drive/bilder/<file>
 //     bra_att_veta/    (Google Docs) -> src/content/bra-att-veta/<slug>.md
@@ -39,6 +41,7 @@ const OUT = {
   files: join(ROOT, 'public/dokument'),
   images: join(ROOT, 'src/assets/drive/bilder'),
   startsida: join(ROOT, 'src/content/startsida'),
+  startImage: join(ROOT, 'src/assets/drive/startsida'),
   pages: join(ROOT, 'src/content/bra-att-veta'),
   index: join(ROOT, 'src/data/generated/drive.json'),
   manifest: join(ROOT, 'public/_drive-manifest.json'),
@@ -54,9 +57,13 @@ const EXPORTABLE_TO_PDF = new Set([
   'application/vnd.google-apps.presentation',
 ]);
 const IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp']);
-const SUBFOLDERS = { files: 'filer', images: 'bilder', pages: 'bra_att_veta' } as const;
-const START_DOC = 'startsida';
-const START_IMAGE = 'startbild';
+const WORD_EXTENSIONS = new Set(['docx', 'doc', 'odt', 'rtf']);
+const SUBFOLDERS = {
+  start: 'startsida',
+  files: 'filer',
+  images: 'bilder',
+  pages: 'bra_att_veta',
+} as const;
 
 type Item = {
   id: string;
@@ -73,6 +80,12 @@ type Source = {
   download(item: Item): Promise<Buffer>;
   exportAs(item: Item, mimeType: 'text/markdown' | 'application/pdf'): Promise<Buffer>;
 };
+
+/** Uploaded Word (or similar) files are not Google Docs and cannot be read as text. */
+const isWordFile = (item: Item) => WORD_EXTENSIONS.has(splitExtension(item.name).ext);
+const convertHint = (where: string, item: Item) =>
+  `${where}/${item.name} is a Word file, not a Google Doc. In Drive: right-click it, ` +
+  `Open with → Google Docs, then delete the Word file.`;
 
 const warnings: string[] = [];
 const warn = (message: string) => {
@@ -205,7 +218,14 @@ function fixtureSource(): Source {
 // ---------------------------------------------------------------------------
 
 async function resetOutputs() {
-  for (const dir of [OUT.files, OUT.images, OUT.startsida, OUT.pages, dirname(OUT.index)]) {
+  for (const dir of [
+    OUT.files,
+    OUT.images,
+    OUT.startsida,
+    OUT.startImage,
+    OUT.pages,
+    dirname(OUT.index),
+  ]) {
     await rm(dir, { recursive: true, force: true });
     await mkdir(dir, { recursive: true });
   }
@@ -260,31 +280,82 @@ async function main() {
 
   const findFolder = (name: string) =>
     root.find((i) => i.mimeType === FOLDER_MIME && i.name === name);
-  const known = new Set<string>([START_DOC, ...Object.values(SUBFOLDERS)]);
+  const known = new Set<string>(Object.values(SUBFOLDERS));
   for (const item of root) {
     if (!known.has(item.name) && !isDraft(item.name)) {
       warn(
-        `"${item.name}" in Hemsida is not used. Only startsida, filer, bilder and bra_att_veta are read.`,
+        `"${item.name}" in Hemsida is not used. Only the folders startsida, filer, bilder and bra_att_veta are read.`,
       );
     }
   }
 
-  // --- Startsida ------------------------------------------------------------
-  const startDoc = root.find((i) => i.name === START_DOC && i.mimeType === DOC_MIME);
-  if (!startDoc) throw new Error('The Google Doc "startsida" is missing from Hemsida.');
+  // --- startsida --------------------------------------------------------------
+  // One Google Doc (the welcome text) and one image, both with any name.
+  const startFolder = findFolder(SUBFOLDERS.start);
+  if (!startFolder) throw new Error(`The folder "${SUBFOLDERS.start}" is missing from Hemsida.`);
   {
+    const items = (await source.list(startFolder))
+      .filter((i) => !isDraft(i.name))
+      .sort((a, b) => swedishCollator.compare(a.name, b.name));
+    const docs = items.filter((i) => i.mimeType === DOC_MIME);
+    const images = items.filter((i) => IMAGE_EXTENSIONS.has(splitExtension(i.name).ext));
+    for (const item of items) {
+      if (docs.includes(item) || images.includes(item)) continue;
+      warn(
+        isWordFile(item)
+          ? convertHint('startsida', item)
+          : `startsida/${item.name}: not used. Only one Google Doc and one image (JPEG, PNG, WebP) are read.`,
+      );
+    }
+
+    const startDoc = docs[0];
+    if (!startDoc) {
+      throw new Error(
+        'There is no Google Doc in Hemsida/startsida. Create one with the welcome text' +
+          (items.some(isWordFile) ? ' (a Word file is there: open it with Google Docs).' : '.'),
+      );
+    }
+    if (docs.length > 1)
+      warn(`startsida: ${docs.length} Google Docs found; using "${startDoc.name}". Keep only one.`);
     const raw = (await source.exportAs(startDoc, 'text/markdown')).toString('utf8');
     const { markdown, imagesRemoved } = cleanDocMarkdown(raw);
     if (imagesRemoved)
-      warn(`startsida: ${imagesRemoved} image(s) removed. Put images in bilder instead.`);
+      warn(
+        `startsida/${startDoc.name}: ${imagesRemoved} image(s) in the Doc removed. Put the image in the startsida folder instead.`,
+      );
     await writeFile(join(OUT.startsida, 'startsida.md'), markdown);
-    index.startsida = { summary: firstParagraph(markdown), modifiedTime: startDoc.modifiedTime };
     manifest.items.push({
       kind: 'startsida',
       id: startDoc.id,
-      name: START_DOC,
+      name: startDoc.name,
       modifiedTime: startDoc.modifiedTime,
     });
+
+    let image: string | null = null;
+    const startImage = images[0];
+    if (startImage) {
+      if (images.length > 1)
+        warn(
+          `startsida: ${images.length} images found; using "${startImage.name}". Keep only one.`,
+        );
+      const { base, ext } = splitExtension(startImage.name);
+      image = `${slugify(base) || 'startbild'}.${ext}`;
+      await writeFile(join(OUT.startImage, image), await source.download(startImage));
+      manifest.items.push({
+        kind: 'startbild',
+        id: startImage.id,
+        name: startImage.name,
+        modifiedTime: startImage.modifiedTime,
+      });
+    } else {
+      warn('startsida: no image found; the start page is shown without one.');
+    }
+
+    index.startsida = {
+      summary: firstParagraph(markdown),
+      modifiedTime: startDoc.modifiedTime,
+      image,
+    };
   }
 
   // --- filer ----------------------------------------------------------------
@@ -360,11 +431,7 @@ async function main() {
       const slug = uniqueSlug(slugify(base), used, 'bilder');
       const fileName = `${slug}.${ext}`;
       await writeFile(join(OUT.images, fileName), await source.download(item));
-      const image: DriveImage = {
-        title: base,
-        fileName,
-        isStart: base.toLowerCase() === START_IMAGE,
-      };
+      const image: DriveImage = { title: base, fileName };
       index.images.push(image);
       manifest.items.push({
         kind: 'image',
@@ -374,8 +441,6 @@ async function main() {
       });
     }
     index.images.sort((a, b) => swedishCollator.compare(a.title, b.title));
-    if (!index.images.some((i) => i.isStart))
-      warn('bilder: no image named "startbild"; the start page has no image.');
   }
 
   // --- bra_att_veta -----------------------------------------------------------
@@ -386,7 +451,11 @@ async function main() {
     for (const item of await source.list(pagesFolder)) {
       if (isDraft(item.name)) continue;
       if (item.mimeType !== DOC_MIME) {
-        warn(`bra_att_veta/${item.name}: only Google Docs become pages. Put files in filer.`);
+        warn(
+          isWordFile(item)
+            ? convertHint('bra_att_veta', item)
+            : `bra_att_veta/${item.name}: only Google Docs become pages. Put files in filer.`,
+        );
         continue;
       }
       const title = item.name.trim();

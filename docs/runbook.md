@@ -32,15 +32,16 @@ organization is renamed, update the provider's attribute condition and the bindi
 
 ## Something is wrong
 
-| Symptom                                     | Check                                                                                 | Fix                                                                                        |
-| ------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Changes in Hemsida don't appear             | Actions → Deploy: recent scheduled runs?                                              | If the workflow is disabled: Actions → Deploy → **Enable workflow**, then **Run workflow** |
-| Deploy fails at "Sign in to Google"         | Repository variables `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT`                        | Compare with this runbook; check the provider's condition still names this repo            |
-| Deploy fails at "Read Hemsida" with 404/403 | Is Hemsida still shared with the service account? Is `DRIVE_HEMSIDA_FOLDER_ID` right? | Reshare as Viewer; fix the variable                                                        |
-| "folder … is missing from Hemsida"          | Someone renamed `filer`, `bilder` or `bra_att_veta`, or the Doc `startsida`           | Rename back                                                                                |
-| "Content shrank from X to Y items"          | Was something deleted on purpose?                                                     | If yes: Run workflow with **allow shrink**. If not: restore from Drive's trash             |
-| "Two items … get the same address"          | Two files with names that differ only in å/ä/ö or punctuation                         | Rename one                                                                                 |
-| `check-dist` fails                          | Read the listed problems                                                              | Fix in code (pull request)                                                                 |
+| Symptom                                       | Check                                                                                 | Fix                                                                                        |
+| --------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Changes in Hemsida don't appear               | Actions → Deploy: recent scheduled runs?                                              | If the workflow is disabled: Actions → Deploy → **Enable workflow**, then **Run workflow** |
+| Deploy fails at "Sign in to Google"           | Repository variables `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT`                        | Compare with this runbook; check the provider's condition still names this repo            |
+| Deploy fails at "Read Hemsida" with 404/403   | Is Hemsida still shared with the service account? Is `DRIVE_HEMSIDA_FOLDER_ID` right? | Reshare as Viewer; fix the variable                                                        |
+| "folder … is missing from Hemsida"            | Someone renamed `startsida`, `filer`, `bilder` or `bra_att_veta`                      | Rename back                                                                                |
+| "There is no Google Doc in Hemsida/startsida" | Is the welcome text a Word file?                                                      | Open it with Google Docs, delete the Word file                                             |
+| "Content shrank from X to Y items"            | Was something deleted on purpose?                                                     | If yes: Run workflow with **allow shrink**. If not: restore from Drive's trash             |
+| "Two items … get the same address"            | Two files with names that differ only in å/ä/ö or punctuation                         | Rename one                                                                                 |
+| `check-dist` fails                            | Read the listed problems                                                              | Fix in code (pull request)                                                                 |
 
 The job summary of each run lists what was found in Drive and any warnings (skipped files etc.).
 

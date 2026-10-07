@@ -14,22 +14,24 @@ The public website of BF Rörsjöhus u p a (Föreningsgatan 43 B, Malmö), publi
 
 ```
 Hemsida/ (Google Drive, private)          GitHub Actions (.github/workflows/deploy.yml)
-  startsida      (Google Doc) ─┐          1. sign in to Google as a service account
+  startsida/     (Doc + image)─┐          1. sign in to Google as a service account
   filer/         (any files)   ├─ sync ─▶ 2. scripts/sync-drive.ts  → generated content
   bilder/        (images)      │          3. scripts/check-changed.ts (skip if nothing changed)
   bra_att_veta/  (Google Docs) ┘          4. astro build + scripts/check-dist.ts
                                           5. deploy to GitHub Pages
 ```
 
-| Drive             | Becomes                                       | Generated into                  |
-| ----------------- | --------------------------------------------- | ------------------------------- |
-| `startsida` (Doc) | Welcome text on `/`                           | `src/content/startsida/`        |
-| `filer/`          | Table on `/dokument/`, files at `/dokument/*` | `public/dokument/`              |
-| `bilder/`         | Gallery on `/bilder/`; `startbild.*` on `/`   | `src/assets/drive/bilder/`      |
-| `bra_att_veta/`   | One page per Doc at `/bra-att-veta/<slug>/`   | `src/content/bra-att-veta/`     |
-| (index of all)    | Data for the pages above                      | `src/data/generated/drive.json` |
+| Drive           | Becomes                                       | Generated into                                          |
+| --------------- | --------------------------------------------- | ------------------------------------------------------- |
+| `startsida/`    | Doc: welcome text on `/`; image: start image  | `src/content/startsida/`, `src/assets/drive/startsida/` |
+| `filer/`        | Table on `/dokument/`, files at `/dokument/*` | `public/dokument/`                                      |
+| `bilder/`       | Gallery on `/bilder/`                         | `src/assets/drive/bilder/`                              |
+| `bra_att_veta/` | One page per Doc at `/bra-att-veta/<slug>/`   | `src/content/bra-att-veta/`                             |
+| (index of all)  | Data for the pages above                      | `src/data/generated/drive.json`                         |
 
-Everything generated is gitignored. Names starting with `_` are skipped (drafts).
+Everything generated is gitignored. Names starting with `_` are skipped (drafts). In `startsida/`
+names don't matter: the first Google Doc and the first image (alphabetically) are used. Word files
+are reported in the job summary with a hint to convert them.
 
 ### Google access, without any stored secret
 

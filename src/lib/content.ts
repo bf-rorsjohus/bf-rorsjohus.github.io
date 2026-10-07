@@ -6,7 +6,9 @@ import type { DriveIndex } from './drive-index';
 const schema = z.object({
   generatedAt: z.string(),
   source: z.enum(['drive', 'fixtures']),
-  startsida: z.object({ summary: z.string(), modifiedTime: z.string() }).nullable(),
+  startsida: z
+    .object({ summary: z.string(), modifiedTime: z.string(), image: z.string().nullable() })
+    .nullable(),
   files: z.array(
     z.object({
       title: z.string(),
@@ -18,7 +20,7 @@ const schema = z.object({
       size: z.number(),
     }),
   ),
-  images: z.array(z.object({ title: z.string(), fileName: z.string(), isStart: z.boolean() })),
+  images: z.array(z.object({ title: z.string(), fileName: z.string() })),
   pages: z.array(
     z.object({
       title: z.string(),

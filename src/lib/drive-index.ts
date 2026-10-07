@@ -14,7 +14,6 @@ export type DriveFile = {
 export type DriveImage = {
   title: string; // caption and alt text
   fileName: string; // file in src/assets/drive/bilder/
-  isStart: boolean;
 };
 
 export type DrivePage = {
@@ -27,7 +26,11 @@ export type DrivePage = {
 export type DriveIndex = {
   generatedAt: string;
   source: 'drive' | 'fixtures';
-  startsida: { summary: string; modifiedTime: string } | null;
+  startsida: {
+    summary: string;
+    modifiedTime: string;
+    image: string | null; // file in src/assets/drive/startsida/
+  } | null;
   files: DriveFile[];
   images: DriveImage[];
   pages: DrivePage[];
@@ -39,7 +42,7 @@ export type DriveManifest = {
   generatedAt: string;
   counts: { files: number; images: number; pages: number };
   items: {
-    kind: 'startsida' | 'file' | 'image' | 'page';
+    kind: 'startsida' | 'startbild' | 'file' | 'image' | 'page';
     id: string;
     name: string;
     modifiedTime: string;

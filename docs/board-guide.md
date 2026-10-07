@@ -9,12 +9,12 @@ Tar du bort något försvinner det från hemsidan på samma sätt.
 
 ## Mappen Hemsida
 
-| I Hemsida                | Syns på hemsidan som                                    |
-| ------------------------ | ------------------------------------------------------- |
-| Dokumentet **startsida** | Välkomsttexten på startsidan                            |
-| Mappen **filer**         | Tabellen på sidan Dokument                              |
-| Mappen **bilder**        | Bildgalleriet. Bilden **startbild** visas på startsidan |
-| Mappen **bra_att_veta**  | En egen sida för varje Google-dokument                  |
+| I Hemsida               | Syns på hemsidan som                                          |
+| ----------------------- | ------------------------------------------------------------- |
+| Mappen **startsida**    | Välkomsttexten (ett Google-dokument) och bilden på startsidan |
+| Mappen **filer**        | Tabellen på sidan Dokument                                    |
+| Mappen **bilder**       | Bildgalleriet                                                 |
+| Mappen **bra_att_veta** | En egen sida för varje Google-dokument                        |
 
 ## Lägga upp ett dokument (t.ex. en årsredovisning)
 
@@ -32,7 +32,13 @@ Byta ut ett dokument: ta bort det gamla och lägg in det nya med samma namn.
    blir bildtexten och beskrivningen för den som använder skärmläsare.
 3. JPEG, PNG och WebP fungerar. Storleken spelar ingen roll.
 
-Byta bild på startsidan: ersätt filen **startbild** (t.ex. `startbild.jpg`).
+## Ändra startsidan
+
+Mappen **startsida** innehåller ett Google-dokument med välkomsttexten och en bild. Namnen spelar
+ingen roll.
+
+- Ändra texten: öppna dokumentet och skriv.
+- Byta bild: ta bort den gamla bilden och lägg in den nya. Ha bara en bild i mappen.
 
 ## Ändra eller skapa en "Bra att veta"-sida
 
@@ -42,6 +48,9 @@ Byta bild på startsidan: ersätt filen **startbild** (t.ex. `startbild.jpg`).
    Färger, typsnitt och bilder i dokumentet följer inte med.
 3. Ny sida: skapa ett nytt Google-dokument i mappen. Dokumentets namn blir sidans rubrik och
    adress. Sidorna visas i bokstavsordning.
+
+**Word-filer fungerar inte som sidor.** Laddar du upp en .docx: högerklicka på den → Öppna med →
+Google Dokument, och ta sedan bort Word-filen.
 
 ## Förbereda något utan att publicera
 
@@ -67,8 +76,8 @@ utkast. Årsredovisningar, budget, stadgar, regler och energideklaration går br
 
 ## Gör aldrig detta
 
-- Byt inte namn på eller flytta mapparna **filer**, **bilder**, **bra_att_veta** eller
-  dokumentet **startsida**.
+- Byt inte namn på eller flytta mapparna **startsida**, **filer**, **bilder** eller
+  **bra_att_veta**.
 - Ändra inte delningen av Hemsida (den ska vara "Begränsad" och delad med
   webbplats-lasare@bf-rorsjohus-webb.iam.gserviceaccount.com som läsare).
 - Lägg aldrig till ett betalkort i Google Cloud.
