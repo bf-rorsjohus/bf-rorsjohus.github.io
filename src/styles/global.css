@@ -1,0 +1,146 @@
+/* Design tokens, reset and base typography. Component styles live in *.module.css. */
+
+:root {
+  /* Colour: warm off-white, near-black text, brick accent from the facade.
+     Contrast against --color-bg: text 15.6:1, muted 7.0:1, accent 7.4:1 (WCAG AA needs 4.5:1). */
+  --color-bg: #faf7f2;
+  --color-surface: #ffffff;
+  --color-text: #1f1b18;
+  --color-muted: #5b524b;
+  --color-accent: #8a3b2b;
+  --color-accent-strong: #6f2d20;
+  --color-border: #e2d9ce;
+  --color-focus: #1f5fbf;
+
+  /* Typography */
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --text-sm: 0.9375rem;
+  --text-base: 1.125rem; /* 18px */
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: clamp(1.875rem, 1.4rem + 1.8vw, 2.5rem);
+  --leading: 1.6;
+
+  /* Spacing (8px scale) */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-6: 3rem;
+  --space-8: 4rem;
+
+  /* Layout */
+  --width-text: 45rem; /* ~720px reading column */
+  --width-wide: 70rem; /* ~1120px */
+  --gutter: clamp(1rem, 0.5rem + 2vw, 1.5rem);
+  --radius: 0.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  font-feature-settings: 'tnum' 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  font-weight: 650;
+  margin: 0 0 var(--space-2);
+}
+
+h1 {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: var(--text-xl);
+  margin-top: var(--space-6);
+}
+
+h3 {
+  font-size: var(--text-lg);
+  margin-top: var(--space-4);
+}
+
+p,
+ul,
+ol {
+  margin: 0 0 var(--space-2);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--color-accent-strong);
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+main {
+  flex: 1;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--width-wide) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.reading {
+  max-width: var(--width-text);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

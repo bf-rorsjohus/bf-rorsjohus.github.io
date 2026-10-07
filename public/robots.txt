@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bf-rorsjohus.github.io/sitemap-index.xml

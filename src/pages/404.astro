@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { NotFoundPage } from '../components/pages/NotFoundPage';
+import { buildSeo } from '../lib/seo';
+
+const seo = buildSeo({
+  path: '/404/',
+  title: 'Sidan finns inte',
+  description: 'Sidan finns inte på BF Rörsjöhus webbplats.',
+  noindex: true,
+});
+---
+
+<BaseLayout seo={seo} path="/404/">
+  <NotFoundPage />
+</BaseLayout>

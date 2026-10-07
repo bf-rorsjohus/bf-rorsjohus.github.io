@@ -1,0 +1,98 @@
+# Builds the site from the code and the Google Drive folder "Hemsida", and publishes it
+# to GitHub Pages. Runs on every push to main, on demand, and every 30 minutes 06–23
+# Swedish time. Scheduled runs only deploy when something in Hemsida has changed.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      allow_shrink:
+        description: 'Tillåt att innehållet minskar kraftigt (avsiktlig rensning i Hemsida)'
+        type: boolean
+        default: false
+  schedule:
+    - cron: '7,37 6-23 * * *'
+      timezone: 'Europe/Stockholm'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Google sign-in via Workload Identity Federation
+      actions: write # keepalive: re-enable this workflow on scheduled runs
+    outputs:
+      changed: ${{ steps.changed.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Sign in to Google as the service account (no stored key)
+        id: google
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/drive.readonly
+          create_credentials_file: false
+
+      - name: Read Hemsida from Google Drive
+        run: npm run sync
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.google.outputs.access_token }}
+          DRIVE_HEMSIDA_FOLDER_ID: ${{ vars.DRIVE_HEMSIDA_FOLDER_ID }}
+
+      - name: Compare with the live site
+        id: changed
+        run: npm run check-changed
+        env:
+          ALLOW_SHRINK: ${{ inputs.allow_shrink && 'true' || 'false' }}
+
+      - name: Build
+        if: github.event_name != 'schedule' || steps.changed.outputs.changed == 'true'
+        run: npm run build
+        env:
+          INDEXING: ${{ vars.INDEXING }} # set to "true" at launch
+          GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
+
+      - name: Upload site
+        if: github.event_name != 'schedule' || steps.changed.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+      - name: Keep the schedule alive
+        if: github.event_name == 'schedule'
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/deploy.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  deploy:
+    needs: build
+    if: github.event_name != 'schedule' || needs.build.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

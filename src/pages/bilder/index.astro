@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GalleryPage } from '../../components/pages/GalleryPage';
+import { getGalleryImages } from '../../lib/images';
+import { buildSeo } from '../../lib/seo';
+
+const seo = buildSeo({
+  path: '/bilder/',
+  title: 'Bilder',
+  description:
+    'Bilder på BF Rörsjöhus, fastigheten från 1898 i Rörsjöstaden i Malmö, och innergården.',
+});
+---
+
+<BaseLayout seo={seo} path="/bilder/">
+  <GalleryPage images={await getGalleryImages()} />
+</BaseLayout>

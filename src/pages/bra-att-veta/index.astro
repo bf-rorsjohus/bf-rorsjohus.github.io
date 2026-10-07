@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GuideIndexPage } from '../../components/pages/GuideIndexPage';
+import { driveIndex } from '../../lib/content';
+import { buildSeo } from '../../lib/seo';
+
+const seo = buildSeo({
+  path: '/bra-att-veta/',
+  title: 'Bra att veta',
+  description: `Bra att veta om BF Rörsjöhus: ${driveIndex.pages.map((p) => p.title).join(', ')}.`,
+});
+---
+
+<BaseLayout seo={seo} path="/bra-att-veta/">
+  <GuideIndexPage pages={driveIndex.pages} />
+</BaseLayout>

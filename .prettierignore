@@ -1,0 +1,8 @@
+dist
+node_modules
+.astro
+package-lock.json
+public/dokument
+src/content
+src/assets/drive
+src/data/generated
