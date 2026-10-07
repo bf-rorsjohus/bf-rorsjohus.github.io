@@ -1,7 +1,7 @@
 // Reads the private Google Drive folder "Hemsida" and turns it into site content.
 //
 //   Hemsida/
-//     Startsida        (Google Doc)  -> src/content/startsida/startsida.md
+//     startsida        (Google Doc)  -> src/content/startsida/startsida.md
 //     filer/                         -> public/dokument/<slug>.<ext>
 //     bilder/                        -> src/assets/drive/bilder/<file>
 //     bra_att_veta/    (Google Docs) -> src/content/bra-att-veta/<slug>.md
@@ -55,7 +55,7 @@ const EXPORTABLE_TO_PDF = new Set([
 ]);
 const IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp']);
 const SUBFOLDERS = { files: 'filer', images: 'bilder', pages: 'bra_att_veta' } as const;
-const START_DOC = 'Startsida';
+const START_DOC = 'startsida';
 const START_IMAGE = 'startbild';
 
 type Item = {
@@ -264,19 +264,19 @@ async function main() {
   for (const item of root) {
     if (!known.has(item.name) && !isDraft(item.name)) {
       warn(
-        `"${item.name}" in Hemsida is not used. Only Startsida, filer, bilder and bra_att_veta are read.`,
+        `"${item.name}" in Hemsida is not used. Only startsida, filer, bilder and bra_att_veta are read.`,
       );
     }
   }
 
   // --- Startsida ------------------------------------------------------------
   const startDoc = root.find((i) => i.name === START_DOC && i.mimeType === DOC_MIME);
-  if (!startDoc) throw new Error('The Google Doc "Startsida" is missing from Hemsida.');
+  if (!startDoc) throw new Error('The Google Doc "startsida" is missing from Hemsida.');
   {
     const raw = (await source.exportAs(startDoc, 'text/markdown')).toString('utf8');
     const { markdown, imagesRemoved } = cleanDocMarkdown(raw);
     if (imagesRemoved)
-      warn(`Startsida: ${imagesRemoved} image(s) removed. Put images in bilder instead.`);
+      warn(`startsida: ${imagesRemoved} image(s) removed. Put images in bilder instead.`);
     await writeFile(join(OUT.startsida, 'startsida.md'), markdown);
     index.startsida = { summary: firstParagraph(markdown), modifiedTime: startDoc.modifiedTime };
     manifest.items.push({

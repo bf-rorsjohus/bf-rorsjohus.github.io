@@ -1,6 +1,6 @@
 // Fixed facts and the start page's contact cards, copied verbatim from the old SBC site
 // (hemsida.sbc.se/bf-rorsjohus-u-p-a, October 2026). The start page's welcome text is NOT here:
-// it lives in the Google Doc "Startsida" in the Hemsida folder, so the board can edit it.
+// it lives in the Google Doc "startsida" in the Hemsida folder, so the board can edit it.
 
 export type LinkCard = {
   heading: string;

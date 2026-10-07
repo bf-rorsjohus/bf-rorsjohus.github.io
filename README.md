@@ -14,7 +14,7 @@ The public website of BF Rörsjöhus u p a (Föreningsgatan 43 B, Malmö), publi
 
 ```
 Hemsida/ (Google Drive, private)          GitHub Actions (.github/workflows/deploy.yml)
-  Startsida      (Google Doc) ─┐          1. sign in to Google as a service account
+  startsida      (Google Doc) ─┐          1. sign in to Google as a service account
   filer/         (any files)   ├─ sync ─▶ 2. scripts/sync-drive.ts  → generated content
   bilder/        (images)      │          3. scripts/check-changed.ts (skip if nothing changed)
   bra_att_veta/  (Google Docs) ┘          4. astro build + scripts/check-dist.ts
@@ -23,7 +23,7 @@ Hemsida/ (Google Drive, private)          GitHub Actions (.github/workflows/depl
 
 | Drive             | Becomes                                       | Generated into                  |
 | ----------------- | --------------------------------------------- | ------------------------------- |
-| `Startsida` (Doc) | Welcome text on `/`                           | `src/content/startsida/`        |
+| `startsida` (Doc) | Welcome text on `/`                           | `src/content/startsida/`        |
 | `filer/`          | Table on `/dokument/`, files at `/dokument/*` | `public/dokument/`              |
 | `bilder/`         | Gallery on `/bilder/`; `startbild.*` on `/`   | `src/assets/drive/bilder/`      |
 | `bra_att_veta/`   | One page per Doc at `/bra-att-veta/<slug>/`   | `src/content/bra-att-veta/`     |

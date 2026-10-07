@@ -11,7 +11,7 @@ Tar du bort något försvinner det från hemsidan på samma sätt.
 
 | I Hemsida                | Syns på hemsidan som                                    |
 | ------------------------ | ------------------------------------------------------- |
-| Dokumentet **Startsida** | Välkomsttexten på startsidan                            |
+| Dokumentet **startsida** | Välkomsttexten på startsidan                            |
 | Mappen **filer**         | Tabellen på sidan Dokument                              |
 | Mappen **bilder**        | Bildgalleriet. Bilden **startbild** visas på startsidan |
 | Mappen **bra_att_veta**  | En egen sida för varje Google-dokument                  |
@@ -68,7 +68,7 @@ utkast. Årsredovisningar, budget, stadgar, regler och energideklaration går br
 ## Gör aldrig detta
 
 - Byt inte namn på eller flytta mapparna **filer**, **bilder**, **bra_att_veta** eller
-  dokumentet **Startsida**.
+  dokumentet **startsida**.
 - Ändra inte delningen av Hemsida (den ska vara "Begränsad" och delad med
   webbplats-lasare@bf-rorsjohus-webb.iam.gserviceaccount.com som läsare).
 - Lägg aldrig till ett betalkort i Google Cloud.
