@@ -11,6 +11,8 @@
   "scripts": {
     "dev": "astro dev",
     "sync": "node scripts/sync-drive.ts",
+    "drive:login": "node scripts/sync-local.ts login",
+    "drive:sync": "node scripts/sync-local.ts sync",
     "sync:fixtures": "node scripts/sync-drive.ts --fixtures",
     "check-changed": "node scripts/check-changed.ts",
     "build": "astro check && astro build && node scripts/check-dist.ts",
