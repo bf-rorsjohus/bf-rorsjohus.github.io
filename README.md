@@ -53,6 +53,8 @@ Repository **variables** (Settings → Secrets and variables → Actions → Var
 
 ## Working on the code
 
+Instructions for Claude (and a compact summary of the rules for anyone) are in `CLAUDE.md`.
+
 Requires Node 24 (see `.nvmrc`; Node ≥ 22.18 also works). Scripts are plain TypeScript run by
 Node's built-in type stripping.
 
