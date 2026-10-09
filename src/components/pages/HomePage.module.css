@@ -56,9 +56,11 @@
   pointer-events: none;
 }
 .image {
+  display: block;
   width: 100%;
-  aspect-ratio: 1.16;
-  object-fit: cover;
+  height: auto; /* keeps the image's own aspect ratio (width/height attrs) */
+  max-height: min(70vh, 38rem); /* very tall images are letterboxed, not cropped */
+  object-fit: contain;
   mix-blend-mode: multiply;
 }
 .visual figcaption {
@@ -242,9 +244,6 @@
   }
   .lead {
     max-width: 30rem;
-  }
-  .image {
-    aspect-ratio: 1.4;
   }
   .facts {
     grid-template-columns: 1fr 1fr;
