@@ -9,7 +9,12 @@ const NAV = [
   { href: '/bilder/', label: 'Bilder' },
 ];
 
-export function Header({ currentPath }: { currentPath: string }) {
+interface Props {
+  currentPath: string;
+  guides: { title: string; slug: string }[];
+}
+
+export function Header({ currentPath, guides }: Props) {
   return (
     <header className={styles.header}>
       <a className={styles.skip} href="#main">
@@ -25,7 +30,12 @@ export function Header({ currentPath }: { currentPath: string }) {
         <nav aria-label="Huvudmeny">
           <ul className={styles.nav}>
             {NAV.map((item) => (
-              <li key={item.href}>
+              <li
+                key={item.href}
+                className={
+                  item.href === '/bra-att-veta/' && guides.length > 0 ? styles.hasMenu : undefined
+                }
+              >
                 <a
                   href={item.href}
                   aria-current={
@@ -36,6 +46,22 @@ export function Header({ currentPath }: { currentPath: string }) {
                 >
                   {item.label}
                 </a>
+                {item.href === '/bra-att-veta/' && guides.length > 0 && (
+                  <ul className={styles.menu}>
+                    {guides.map((guide) => (
+                      <li key={guide.slug}>
+                        <a
+                          href={`/bra-att-veta/${guide.slug}/`}
+                          aria-current={
+                            currentPath === `/bra-att-veta/${guide.slug}/` ? 'page' : undefined
+                          }
+                        >
+                          {guide.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
             <li className={styles.portal}>

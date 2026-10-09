@@ -56,6 +56,36 @@
   text-decoration: underline;
   text-underline-offset: 0.65em;
 }
+.hasMenu {
+  position: relative;
+}
+.menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: -1rem;
+  z-index: 10;
+  min-width: 14rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  list-style: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+.hasMenu:hover .menu,
+.hasMenu:focus-within .menu {
+  display: block;
+}
+.menu a {
+  display: flex;
+  padding: 0.25rem 1rem;
+  white-space: nowrap;
+}
+.menu a:hover,
+.menu a[aria-current='page'] {
+  text-decoration: none;
+  background: var(--color-panel);
+}
 .portal a {
   padding: 0.15rem 1rem;
   border: 1px solid var(--color-border);
@@ -81,6 +111,9 @@
   top: 0.5rem;
 }
 @media (max-width: 52rem) {
+  .menu {
+    display: none !important;
+  }
   .inner {
     flex-direction: column;
     gap: 1.1rem;
