@@ -8,6 +8,8 @@ import './viewer.css';
 GLightbox({
   selector: 'a[data-viewer]',
   loop: true,
+  zoomable: false,
+  draggable: false,
   touchNavigation: true,
   keyboardNavigation: true,
   closeOnOutsideClick: true,

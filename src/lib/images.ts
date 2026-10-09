@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { driveIndex } from './content';
+import { capitalizeFirst } from './format';
 
 const modules = import.meta.glob<ImageMetadata>(
   '/src/assets/drive/{bilder,startsida}/*.{png,jpg,jpeg,webp}',
@@ -58,7 +59,7 @@ export async function getGalleryImages(): Promise<ResponsiveImage[]> {
       toResponsive(
         'bilder',
         i.fileName,
-        i.title,
+        capitalizeFirst(i.title),
         '(min-width: 1344px) 588px, (min-width: 704px) 44vw, 90vw',
       ),
     ),
@@ -74,4 +75,25 @@ export async function getStartImage(): Promise<ResponsiveImage | null> {
     'BF Rörsjöhus, fastigheten i Rörsjöstaden',
     '(min-width: 1344px) 580px, (min-width: 704px) 44vw, 90vw',
   );
+}
+
+const SOCIAL = { width: 1200, height: 630 }; // the size link previews are designed for
+
+/** The start image cropped for link previews (og:image). JPEG, as some apps ignore WebP. */
+export async function getSocialImage(): Promise<{
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+} | null> {
+  const fileName = driveIndex.startsida?.image;
+  if (!fileName) return null;
+  const img = await getImage({
+    src: metadataFor('startsida', fileName),
+    ...SOCIAL,
+    fit: 'cover',
+    format: 'jpeg',
+    quality: 80,
+  });
+  return { src: img.src, ...SOCIAL, alt: 'BF Rörsjöhus, fastigheten i Rörsjöstaden' };
 }

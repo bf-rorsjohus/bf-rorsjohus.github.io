@@ -6,6 +6,7 @@ import {
   yearFromTitle,
   formatFileSize,
   isDraft,
+  capitalizeFirst,
 } from '../src/lib/format.ts';
 
 test('slugify handles Swedish letters and punctuation', () => {
@@ -42,4 +43,11 @@ test('formatFileSize uses Swedish decimals', () => {
 test('isDraft recognises the underscore rule', () => {
   assert.equal(isDraft('_Utkast budget 2027.pdf'), true);
   assert.equal(isDraft('Budget 2027.pdf'), false);
+});
+
+test('capitalizeFirst upper-cases the first letter only', () => {
+  assert.equal(capitalizeFirst('innergården med tornen'), 'Innergården med tornen');
+  assert.equal(capitalizeFirst('Ålderdom'), 'Ålderdom');
+  assert.equal(capitalizeFirst('åtgärd'), 'Åtgärd');
+  assert.equal(capitalizeFirst(''), '');
 });

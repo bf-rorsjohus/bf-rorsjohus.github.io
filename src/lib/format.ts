@@ -88,3 +88,8 @@ export function fileTypeLabel(ext: string): string {
   };
   return map[ext.toLowerCase()] ?? ext.toUpperCase();
 }
+
+/** Upper-cases the first letter (Swedish-aware), e.g. for image names typed in lower case. */
+export function capitalizeFirst(text: string): string {
+  return text.charAt(0).toLocaleUpperCase('sv-SE') + text.slice(1);
+}
