@@ -25,3 +25,7 @@ const seo = buildSeo({
 <BaseLayout seo={seo} path="/dokument/">
   <DocumentsPage files={sortFiles(driveIndex.files, sort)} sort={sort} />
 </BaseLayout>
+
+<script>
+  import '../../scripts/viewer/index.ts';
+</script>

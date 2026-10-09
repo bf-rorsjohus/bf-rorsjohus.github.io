@@ -15,6 +15,7 @@ export default tseslint.config(
       ...jsxA11y.flatConfigs.recommended.rules,
       'react/jsx-key': 'error',
       // Components render on the server only; hooks with effects would never run.
+      // Client behaviour lives in src/scripts/ (vanilla TS), never in components.
       'no-restricted-imports': [
         'error',
         {

@@ -9,7 +9,13 @@ export function Gallery({ images }: { images: ResponsiveImage[] }) {
       {images.map((image) => (
         <li key={image.src}>
           <figure className={styles.figure}>
-            <a href={image.fullSrc} className={styles.link}>
+            <a
+              href={image.fullSrc}
+              className={styles.link}
+              data-viewer
+              data-gallery="bilder"
+              data-title={image.alt}
+            >
               <ResponsiveImg image={image} className={styles.image} />
               <span className="visually-hidden"> (öppna bilden i full storlek)</span>
             </a>

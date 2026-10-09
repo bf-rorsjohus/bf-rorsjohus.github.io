@@ -1,7 +1,8 @@
 // Post-build checks on dist/. Fails the build if any rule is broken.
 //
-// - No page references a JavaScript file (the site is meant to be script-free);
-//   unreferenced JS that Astro emits anyway is deleted.
+// - Pages only run first-party scripts bundled into /_astro/ (the image and document viewers);
+//   no inline scripts (except JSON-LD), no inline event handlers, no external script hosts.
+//   JS that no page reaches (directly or via imports) is deleted.
 // - Every page has a <title>, a meta description and exactly one <h1>;
 //   every indexable page has a canonical link.
 // - Every <img> has an alt attribute.
@@ -48,17 +49,28 @@ async function main() {
   const htmlFiles = files.filter((f) => f.endsWith('.html'));
   const allHtml = (await Promise.all(htmlFiles.map((f) => readFile(f, 'utf8')))).join('\n');
 
-  // @astrojs/react always emits its client runtime, even when nothing hydrates.
-  // Unreferenced scripts are never downloaded; remove them so the deploy stays clean.
-  for (const file of files.filter((f) => ['.js', '.mjs'].includes(extname(f)))) {
-    const name = file.split('/').pop()!;
-    if (allHtml.includes(name)) {
-      problems.push(
-        `${rel(file)}: JavaScript referenced by a page; the site must ship no scripts.`,
-      );
-    } else {
+  // @astrojs/react always emits its client runtime, even when nothing hydrates. Keep only the JS
+  // reachable from a page (entry scripts and anything they import);
+  // unreferenced scripts are never downloaded, so remove them to keep the deploy clean.
+  const jsFiles = files.filter((f) => ['.js', '.mjs'].includes(extname(f)));
+  const jsSources = new Map(
+    await Promise.all(jsFiles.map(async (f) => [f, await readFile(f, 'utf8')] as const)),
+  );
+  const reachable = new Set<string>();
+  const queue = jsFiles.filter((f) => allHtml.includes(f.split('/').pop()!));
+  while (queue.length) {
+    const file = queue.pop()!;
+    if (reachable.has(file)) continue;
+    reachable.add(file);
+    const source = jsSources.get(file)!;
+    queue.push(...jsFiles.filter((f) => !reachable.has(f) && source.includes(f.split('/').pop()!)));
+  }
+  for (const file of jsFiles) {
+    if (!reachable.has(file)) {
       await rm(file);
       console.log(`check-dist: removed unreferenced ${rel(file)}`);
+    } else if (!rel(file).startsWith('/_astro/')) {
+      problems.push(`${rel(file)}: JavaScript outside /_astro/.`);
     }
   }
 
@@ -67,8 +79,14 @@ async function main() {
     const page = rel(file);
     const isNotFound = page === '/404.html';
 
-    if (/<script(?![^>]*type="application\/ld\+json")/i.test(html))
-      problems.push(`${page}: contains a <script>.`);
+    for (const script of html.match(/<script\b[^>]*>/gi) ?? []) {
+      if (/type="application\/ld\+json"/i.test(script)) continue;
+      if (!/\ssrc="\/_astro\/[^"]+\.js"/i.test(script))
+        problems.push(`${page}: <script> that is not a first-party /_astro/ file: ${script}`);
+    }
+    if (/<script\b(?![^>]*\ssrc=)(?![^>]*type="application\/ld\+json")/i.test(html))
+      problems.push(`${page}: contains an inline <script>.`);
+    if (/<[a-z][^>]*\son[a-z]+\s*=/i.test(html)) problems.push(`${page}: inline event handler.`);
     if (!/<title>[^<]+<\/title>/i.test(html)) problems.push(`${page}: missing <title>.`);
     if (!/<meta name="description" content="[^"]+"/i.test(html))
       problems.push(`${page}: missing meta description.`);

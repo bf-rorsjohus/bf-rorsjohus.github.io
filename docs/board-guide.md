@@ -25,6 +25,9 @@ Tar du bort något försvinner det från hemsidan på samma sätt.
 
 Byta ut ett dokument: ta bort det gamla och lägg in det nya med samma namn.
 
+PDF-filer öppnas direkt i ett fönster på sidan. Andra filtyper (t.ex. Word och Excel) kan inte
+förhandsgranskas utan laddas ner. Använd därför helst PDF.
+
 ## Lägga upp en bild
 
 1. Öppna Hemsida → **bilder**.

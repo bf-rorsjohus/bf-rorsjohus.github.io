@@ -1,7 +1,21 @@
 import type { DriveFile } from '../../lib/drive-index';
 import { fileYear } from '../../lib/file-sort';
+import { isPdf } from '../../lib/viewer';
 import { fileTypeLabel, formatFileSize } from '../../lib/format';
 import styles from './FileTable.module.css';
+
+// Opens PDFs in the lightbox (browser's own PDF viewer in an iframe); other types stay plain links.
+function pdfViewerProps(file: DriveFile) {
+  return {
+    'data-viewer': '',
+    'data-type': 'external',
+    'data-gallery': file.slug,
+    'data-title': file.title,
+    'data-width': '90vw',
+    'data-height': '80vh',
+    'data-description': `<a href="${file.url}" target="_blank" rel="noopener">Öppna i ny flik</a>`,
+  };
+}
 
 export function FileTable({ files, caption }: { files: DriveFile[]; caption: string }) {
   if (files.length === 0) return <p>Det finns inga dokument just nu.</p>;
@@ -23,7 +37,7 @@ export function FileTable({ files, caption }: { files: DriveFile[]; caption: str
           return (
             <tr key={file.slug}>
               <th scope="row" className={styles.name}>
-                <a href={file.url}>
+                <a href={file.url} {...(isPdf(file.ext) ? pdfViewerProps(file) : {})}>
                   {file.title}
                   <span className="visually-hidden">
                     {' '}

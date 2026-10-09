@@ -1,0 +1,100 @@
+/* Site theme for GLightbox: the dim backdrop stays clickable, content is a framed box. */
+.glightbox-clean .goverlay,
+.goverlay {
+  background: rgb(24 30 26 / 0.82);
+}
+.glightbox-clean .gslide-description,
+.glightbox-clean .gdesc-inner {
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+.glightbox-clean .gslide-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+.glightbox-clean .gslide-desc a {
+  display: inline-block;
+  padding: 0.5rem 0;
+}
+.glightbox-clean .gbtn {
+  min-width: 44px;
+  min-height: 44px;
+}
+.glightbox-clean .gbtn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.gslide-external .ginner-container {
+  background: var(--color-surface);
+}
+
+/* PDF slide: the iframe fills the box, title and "open in new tab" sit in a slim footer. */
+.ginner-container:has(.gslide-external) {
+  width: 100%;
+}
+.ginner-container:has(.gslide-external) .gslide-description {
+  flex: none;
+}
+.gslide-external {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  margin: 0;
+}
+.glightbox-clean .gdesc-inner {
+  padding: 0.75rem 1rem;
+}
+.glightbox-clean .gslide-title {
+  margin-bottom: 0.25rem;
+}
+
+/* Image slide: a framed box (not full screen) so the backdrop around it stays clickable. */
+.glightbox-container .gslide-image img {
+  max-height: 72vh !important;
+  max-width: min(92vw, 1200px) !important;
+}
+.ginner-container:not(:has(.gslide-external)) {
+  width: fit-content !important;
+  max-width: min(92vw, 1200px) !important;
+  height: auto !important;
+  margin: auto;
+  background: var(--color-surface);
+}
+.ginner-container:not(:has(.gslide-external)) .gslide-description {
+  flex: none;
+}
+
+/* Motion: short, ease-out, faster on exit than on enter; GLightbox defaults are 400-500ms. */
+.gfadeIn {
+  animation: gfadeIn 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.gfadeOut {
+  animation: gfadeOut 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.glightbox-container .gslider {
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.greset {
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.glightbox-clean .gbtn {
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 150ms ease;
+}
+.glightbox-clean .gbtn:active {
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .gfadeIn,
+  .gfadeOut {
+    animation-duration: 1ms;
+  }
+  .glightbox-container .gslider,
+  .greset,
+  .glightbox-clean .gbtn {
+    transition: none;
+  }
+}

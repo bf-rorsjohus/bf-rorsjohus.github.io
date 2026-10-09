@@ -15,3 +15,7 @@ const seo = buildSeo({
 <BaseLayout seo={seo} path="/bilder/">
   <GalleryPage images={await getGalleryImages()} />
 </BaseLayout>
+
+<script>
+  import '../../scripts/viewer/index.ts';
+</script>

@@ -25,10 +25,13 @@ Node 24 (`.nvmrc`). Scripts and tests are `.ts` run by Node's type stripping, so
 
 ## Hard rules
 
-- **No client-side JavaScript.** No `client:*` directives, no `useState`/`useEffect`, no event
-  handlers, no `<script>` except JSON-LD. ESLint and `check-dist.ts` enforce this. Interactivity is
-  done with pre-rendered pages and links (see the sort orders under `/dokument/`) or plain HTML
-  such as `<details>`.
+- **Client-side JavaScript only for the image and document viewers.** The only script is
+  `src/scripts/viewer/` (GLightbox, MIT, bundled by Astro; PDFs use the browser's own viewer in a
+  same-origin iframe). Don't hand-roll a replacement; configure or theme GLightbox. No `client:*` directives, no `useState`/`useEffect`, no event handlers in
+  TSX, no inline scripts except JSON-LD, no script from any other origin. Viewer links must keep
+  their normal `href` so the page works without JS. ESLint and `check-dist.ts` enforce this. Other
+  interactivity is still pre-rendered pages and links (see the sort orders under `/dokument/`) or
+  plain HTML such as `<details>`.
 - **No third parties at runtime.** No analytics, cookies, embeds, CDNs or external fonts (Inter is
   self-hosted via `@fontsource-variable`). No paid services, no Google Cloud billing.
 - **No secrets.** Google access is keyless (Workload Identity Federation in `deploy.yml`). Never add

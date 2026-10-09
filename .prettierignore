@@ -6,3 +6,5 @@ public/dokument
 src/content
 src/assets/drive
 src/data/generated
+.agents
+.claude

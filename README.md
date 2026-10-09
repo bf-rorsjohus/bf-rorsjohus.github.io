@@ -4,7 +4,8 @@ The public website of BF Rörsjöhus u p a (Föreningsgatan 43 B, Malmö), publi
 <https://bf-rorsjohus.github.io/>.
 
 - **Static site** built with Astro 7 and React/TSX, rendered to plain HTML at build time.
-  No JavaScript is shipped, no cookies are set, nothing is loaded from third parties.
+  The only JavaScript is the image and PDF viewer popup (self-hosted, progressive enhancement);
+  no cookies are set, nothing is loaded from third parties.
 - **Content comes from Google Drive.** The board edits one private folder, `Hemsida`, in the
   association's Google account. The build reads it every 30 minutes and republishes when
   something changed. Board members never need GitHub. See `docs/board-guide.md` (Swedish).
@@ -81,9 +82,11 @@ SBC site) plus placeholder files and images.
 - `src/data/association.ts` – fixed facts (name, address, org nr, e-mail, member portal link).
 - `scripts/` – `sync-drive.ts`, `check-changed.ts`, `check-dist.ts`.
 
-`check-dist.ts` fails the build if a page references JavaScript, lacks a title, description,
+`check-dist.ts` fails the build if a page references JavaScript other than first-party `/_astro/`
+files, has an inline script (except JSON-LD) or inline event handler, lacks a title, description,
 canonical or exactly one `<h1>`, has an `<img>` without `alt`, or links to something that does
-not exist. (`@astrojs/react` always emits an unused client runtime file; the check deletes it.)
+not exist. (`@astrojs/react` always emits an unused client runtime file; the check deletes JS that no page
+reaches.)
 
 ## Deploys
 
@@ -97,7 +100,11 @@ not exist. (`@astrojs/react` always emits an unused client runtime file; the che
 
 ## Key decisions
 
-- Astro + TSX without hydration: familiar components, zero client JS.
+- Astro + TSX without hydration: familiar components, no framework JS in the browser.
+- Image and document viewer: `src/scripts/viewer/` enhances `a[data-viewer]` links with
+  [GLightbox](https://github.com/biati-digital/glightbox) (prev/next, arrows, swipe, click
+  outside to close; PDFs in the browser's own viewer in a same-origin iframe). Theme overrides are
+  in `viewer.css`. Without JS the links open the file as before.
 - Sorting on `/dokument/` without JavaScript: each sort order is its own pre-rendered page
   (`/dokument/`, `/dokument/namn-o-a/`, `/dokument/nyast/`, `/dokument/aldst/`), canonical to
   `/dokument/` and left out of the sitemap. Default: name A–Ö.
