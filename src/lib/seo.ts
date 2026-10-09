@@ -22,6 +22,7 @@ export function buildSeo(opts: {
   description: string;
   isHome?: boolean;
   noindex?: boolean;
+  breadcrumbs?: { name: string; path: string }[]; // trail above this page, including the page itself
 }): Seo {
   const title = opts.isHome ? opts.title : `${opts.title} – ${SITE_NAME}`;
   const description = clamp(
@@ -33,7 +34,24 @@ export function buildSeo(opts: {
     description,
     canonical: opts.noindex ? null : new URL(opts.canonicalPath ?? opts.path, SITE_URL).toString(),
     noindex: Boolean(opts.noindex) || !indexingEnabled(),
-    jsonLd: opts.isHome ? [organizationJsonLd(), websiteJsonLd()] : [organizationJsonLd()],
+    jsonLd: [
+      organizationJsonLd(),
+      ...(opts.isHome ? [websiteJsonLd()] : []),
+      ...(opts.breadcrumbs ? [breadcrumbsJsonLd(opts.breadcrumbs)] : []),
+    ],
+  };
+}
+
+function breadcrumbsJsonLd(trail: { name: string; path: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: new URL(item.path, SITE_URL).toString(),
+    })),
   };
 }
 

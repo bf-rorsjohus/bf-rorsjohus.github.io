@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { GuidePage } from '../../components/pages/GuidePage';
+import { guideDescription } from '../../lib/guide-seo';
 import { buildSeo } from '../../lib/seo';
 
 export const getStaticPaths = (async () => {
@@ -12,7 +13,16 @@ export const getStaticPaths = (async () => {
 
 const { entry } = Astro.props;
 const path = `/bra-att-veta/${entry.id}/`;
-const seo = buildSeo({ path, title: entry.data.title, description: entry.data.summary });
+const seo = buildSeo({
+  path,
+  title: entry.data.title,
+  description: guideDescription(entry.data.title, entry.data.summary),
+  breadcrumbs: [
+    { name: 'Hem', path: '/' },
+    { name: 'Bra att veta', path: '/bra-att-veta/' },
+    { name: entry.data.title, path },
+  ],
+});
 ---
 
 <BaseLayout seo={seo} path={path}>

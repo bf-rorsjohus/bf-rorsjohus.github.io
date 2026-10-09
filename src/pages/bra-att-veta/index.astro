@@ -7,7 +7,12 @@ import { buildSeo } from '../../lib/seo';
 const seo = buildSeo({
   path: '/bra-att-veta/',
   title: 'Bra att veta',
-  description: `Bra att veta om BF Rörsjöhus: ${driveIndex.pages.map((p) => p.title).join(', ')}.`,
+  description:
+    'Praktisk information för dig som bor i BF Rörsjöhus på Föreningsgatan 43 i Malmö: regler, rutiner och vanliga frågor.',
+  breadcrumbs: [
+    { name: 'Hem', path: '/' },
+    { name: 'Bra att veta', path: '/bra-att-veta/' },
+  ],
 });
 ---
 

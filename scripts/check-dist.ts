@@ -93,6 +93,11 @@ async function main() {
     if (!isNotFound && !/<link rel="canonical" href="https:\/\/[^"]+"/i.test(html)) {
       problems.push(`${page}: missing canonical link.`);
     }
+    const noindex = /<meta name="robots" content="[^"]*noindex/i.test(html);
+    if (process.env.INDEXING === 'true' && !isNotFound && noindex)
+      problems.push(`${page}: noindex although INDEXING=true.`);
+    if (process.env.INDEXING !== 'true' && !noindex)
+      problems.push(`${page}: missing noindex while INDEXING is not true.`);
     const h1s = html.match(/<h1[\s>]/gi)?.length ?? 0;
     if (h1s !== 1) problems.push(`${page}: has ${h1s} <h1> elements, expected 1.`);
 
