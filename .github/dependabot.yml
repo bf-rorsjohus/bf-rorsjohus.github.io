@@ -7,6 +7,16 @@ updates:
     groups:
       all-npm:
         patterns: ['*']
+    ignore:
+      # @astrojs/check and typescript-eslint don't accept TypeScript 7 yet.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      # eslint-plugin-react and eslint-plugin-jsx-a11y don't accept ESLint 10 yet.
+      - dependency-name: eslint
+        update-types: ['version-update:semver-major']
+      # Keep Node types on the runtime's major version (.nvmrc).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
