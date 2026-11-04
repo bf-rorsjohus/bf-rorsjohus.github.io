@@ -46,7 +46,10 @@ async function main() {
   const files = await walk(DIST);
   const rel = (p: string) => p.slice(DIST.length);
 
-  const htmlFiles = files.filter((f) => f.endsWith('.html'));
+  // Google Search Console verification files (public/google<token>.html) are not pages.
+  const htmlFiles = files.filter(
+    (f) => f.endsWith('.html') && !/^\/google[0-9a-f]+\.html$/.test(rel(f)),
+  );
   const allHtml = (await Promise.all(htmlFiles.map((f) => readFile(f, 'utf8')))).join('\n');
 
   // @astrojs/react always emits its client runtime, even when nothing hydrates. Keep only the JS

@@ -54,8 +54,9 @@ If Google may have indexed it: Search Console → Removals.
 
 1. Board reviews the site (it is `noindex` until launch).
 2. Add repository variable `INDEXING` = `true`; Run workflow.
-3. Search Console: add URL-prefix property, verify with the meta tag (put the token in variable
-   `GOOGLE_SITE_VERIFICATION`, Run workflow), submit `sitemap-index.xml`.
+3. Search Console: add URL-prefix property, verify, submit `sitemap-index.xml`. Verification uses
+   the HTML file `public/googlefe0c4447b50ae290.html` (keep it; deleting it can drop
+   verification). The meta-tag method (variable `GOOGLE_SITE_VERIFICATION`) also works.
 
 ## Adding a domain later
 

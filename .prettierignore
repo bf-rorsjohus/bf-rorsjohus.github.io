@@ -8,3 +8,5 @@ src/assets/drive
 src/data/generated
 .agents
 .claude
+# Google Search Console verification: must stay byte-identical
+public/google*.html
