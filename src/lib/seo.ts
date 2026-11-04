@@ -103,6 +103,8 @@ function websiteJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
+    // Helps Google pick the site name shown in results instead of the github.io host.
+    alternateName: [association.name, 'Rörsjöhus'],
     url: `${SITE_URL}/`,
     inLanguage: 'sv',
     publisher: { '@id': `${SITE_URL}/#organization` },
