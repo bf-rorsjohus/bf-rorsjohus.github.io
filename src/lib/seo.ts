@@ -24,7 +24,7 @@ export function buildSeo(opts: {
   noindex?: boolean;
   breadcrumbs?: { name: string; path: string }[]; // trail above this page, including the page itself
 }): Seo {
-  const title = opts.isHome ? opts.title : `${opts.title} – ${SITE_NAME}`;
+  const title = opts.isHome ? opts.title : `${opts.title} - ${SITE_NAME}`;
   const description = clamp(
     opts.description || `${SITE_NAME}, bostadsförening i Rörsjöstaden, Malmö.`,
     155,
