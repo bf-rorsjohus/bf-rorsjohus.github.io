@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { HomePage } from '../components/pages/HomePage';
+import { association } from '../data/association';
 import { driveIndex } from '../lib/content';
 import { getStartImage } from '../lib/images';
 import { buildSeo } from '../lib/seo';
@@ -9,7 +10,7 @@ import { buildSeo } from '../lib/seo';
 const startsida = await getEntry('startsida', 'startsida');
 const seo = buildSeo({
   path: '/',
-  title: 'BF Rörsjöhus – bostadsförening på Föreningsgatan 43, Malmö',
+  title: `${association.name} – bostadsförening på Föreningsgatan 43, Malmö`,
   description: driveIndex.startsida?.summary ?? '',
   isHome: true,
 });
