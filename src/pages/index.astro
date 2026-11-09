@@ -10,7 +10,7 @@ import { buildSeo } from '../lib/seo';
 const startsida = await getEntry('startsida', 'startsida');
 const seo = buildSeo({
   path: '/',
-  title: `${association.name} - bostadsförening på Föreningsgatan 43, Malmö`,
+  title: association.name,
   description: driveIndex.startsida?.summary ?? '',
   isHome: true,
 });
